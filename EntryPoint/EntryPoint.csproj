@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>Snake.EntryPoint</RootNamespace>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Data\Data.csproj" />
+      <ProjectReference Include="..\Rendering\Rendering.csproj" />
+      <ProjectReference Include="..\Simulation\Simulation.csproj" />
+    </ItemGroup>
+
+</Project>
