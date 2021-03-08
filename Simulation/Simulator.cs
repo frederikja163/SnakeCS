@@ -1,25 +1,17 @@
 using System;
+using System.Collections.Generic;
 using OpenTK.Mathematics;
 using Snake.Data;
 
 namespace Snake.Simulation
 {
-    public sealed class Simulator : ISimulator
+    public sealed class MoveSimulator : ISimulator
     {
-        private readonly ISimulator[] _simulators = new ISimulator[] { new SnakeMoveSimulator() };
-        
-        public BoardData Tick(BoardData data)
-        {
-            foreach (var simulator in _simulators)
-            {
-                data = simulator.Tick(data);
-            }
-            return data;
-        }
-    }
 
-    internal sealed class SnakeMoveSimulator : ISimulator
-    {
+        public void Initialize(ControlList controls, BoardData data)
+        {
+        }
+
         public BoardData Tick(BoardData data)
         {
             var oldBody = data.SnakeBody;
@@ -42,6 +34,45 @@ namespace Snake.Simulation
             SnakeBody newBody = oldBody with {Head = newHead, Tail = newTail};
 
             return data with {SnakeBody = newBody};
+        }
+    }
+    
+    public sealed class DirectionSimulator : ISimulator
+    {
+        private Direction? _nextDirection;
+        private Direction _currentDirection;
+        public void Initialize(ControlList controls, BoardData data)
+        {
+            _currentDirection = data.Direction;
+            controls[Control.TurnUp] = () =>
+            {
+                if (_currentDirection != Direction.Down) _nextDirection = Direction.Up;
+            };
+            controls[Control.TurnLeft] = () =>
+            {
+                if (_currentDirection != Direction.Right) _nextDirection = Direction.Left;
+            };
+            controls[Control.TurnDown] = () =>
+            {
+                if (_currentDirection != Direction.Up) _nextDirection = Direction.Down;
+            };
+            controls[Control.TurnRight] = () =>
+            {
+                if (_currentDirection != Direction.Left) _nextDirection = Direction.Right;
+            };
+        }
+
+        public BoardData Tick(BoardData data)
+        {
+            _currentDirection = data.Direction;
+            if (_nextDirection != null)
+            {
+                _currentDirection = _nextDirection.Value;
+                _nextDirection = null;
+                return data with {Direction = _currentDirection};
+            }
+
+            return data;
         }
     }
 }

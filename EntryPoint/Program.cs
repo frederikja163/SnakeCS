@@ -14,14 +14,53 @@ namespace Snake.EntryPoint
         {
             SnakeBody snake = CreateSnake(5);
             BoardData data = new BoardData(snake, Direction.Right);
+            ControlList controls = new ControlList();
 
-            IRenderer renderer = new ConsoleRenderer();
-            ISimulator simulator = new Simulator();
-            
-            while (true)
+            IRenderer[] renderers = new IRenderer[]
             {
-                data = simulator.Tick(data);
-                renderer.Render(data);
+                new SnakeRenderer(),
+            };
+            ISimulator[] simulators = new ISimulator[]
+            {
+                new DirectionSimulator(),
+                new MoveSimulator(),
+            };
+            IUserInterface[] userInterfaces = new IUserInterface[]
+            {
+                new ConsoleUserInterface(),
+            };
+            
+            foreach (var simulator in simulators)
+            {
+                simulator.Initialize(controls, data);
+            }
+            foreach (var renderer in renderers)
+            {
+                renderer.Initialize(data);
+            }
+            foreach (var userInterface in userInterfaces)
+            {
+                userInterface.Initialize(ref controls);
+            }
+
+            bool isRunning = true;
+            controls[Control.Close] = () => isRunning = false;
+            while (isRunning)
+            {
+                foreach (var userInterface in userInterfaces)
+                {
+                    userInterface.PollInput();
+                }
+                
+                foreach (var simulator in simulators)
+                {
+                    data = simulator.Tick(data);
+                }
+
+                foreach (var renderer in renderers)
+                {
+                    renderer.Render(data);
+                }
                 Thread.Sleep(100);
             }
         }
