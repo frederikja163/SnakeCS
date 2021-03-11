@@ -16,7 +16,7 @@ namespace Snake.Data
     
     public interface IUserInterface
     {
-        void Initialize(ref ControlList controls);
+        void Initialize(in ControlList controls);
 
         void PollInput();
     }

@@ -15,7 +15,7 @@ namespace Snake.Data
         Left,
     }
 
-    public record BoardData(SnakeBody SnakeBody, Direction Direction, Box2i BoundingBox, Vector2i Fruit, bool IsAlive = true);
+    public record SnakeData(SnakeBody SnakeBody, Direction Direction, Box2i BoundingBox, Vector2i Fruit, bool IsAlive = true);
 
     public record SnakeBody(SnakePart Head, SnakePart Tail) : IEnumerable<SnakePart>
     {

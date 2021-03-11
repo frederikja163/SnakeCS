@@ -14,42 +14,17 @@ namespace Snake.EntryPoint
         {
             Box2i boundingBox = new Box2i(1, 1, 25, 10);
             SnakeBody snake = CreateSnake(5, (Vector2i)boundingBox.Center);
-            BoardData data = new BoardData(snake, Direction.Right, boundingBox, (Vector2i)boundingBox.Center + Vector2i.UnitX * 5);
-            ControlList controls = new ControlList();
+            SnakeData data = new SnakeData(snake, Direction.Right, boundingBox, (Vector2i)boundingBox.Center + Vector2i.UnitX * 5);
 
-            AppData appData = CreateConsoleApp(data);
+            AppData<SnakeData> appData = CreateConsoleApp(data, new ControlList());
+
+            appData.Initialize();
             
-            foreach (var simulator in appData.Simulators)
-            {
-                simulator.Initialize(controls, data);
-            }
-            foreach (var renderer in appData.Renderers)
-            {
-                renderer.Initialize(data);
-            }
-            foreach (var userInterface in appData.UserInterfaces)
-            {
-                userInterface.Initialize(ref controls);
-            }
-
             bool isRunning = true;
-            controls[Control.Close] = () => isRunning = false;
-            while (isRunning && data.IsAlive)
+            appData.Controls[Control.Close] = () => isRunning = false;
+            while (isRunning && appData.Data.IsAlive)
             {
-                foreach (var userInterface in appData.UserInterfaces)
-                {
-                    userInterface.PollInput();
-                }
-                
-                foreach (var simulator in appData.Simulators)
-                {
-                    data = simulator.Tick(data);
-                }
-
-                foreach (var renderer in appData.Renderers)
-                {
-                    renderer.Render(data);
-                }
+                appData.Tick();
                 Thread.Sleep(100);
             }
         }
@@ -68,17 +43,38 @@ namespace Snake.EntryPoint
             return body;
         }
 
-        private static AppData CreateConsoleApp(BoardData data)
+        private static AppData<SnakeData> Create2dOpentkApp(SnakeData data, ControlList controls)
         {
-            return new AppData(data,
-                new ISimulator[]
+            return new AppData<SnakeData>(data,
+                new ISimulator<SnakeData>[]
                 {
                     new DirectionSimulator(),
                     new MoveSimulator(),
                     new FruitSimulator(),
                     new DeathSimulator(),
                 },
-                new IRenderer[]
+                new IRenderer<SnakeData>[]
+                {
+                    
+                },
+                new IUserInterface[]
+                {
+                    
+                }
+            );
+        }
+
+        private static AppData<SnakeData> CreateConsoleApp(SnakeData data, ControlList controls)
+        {
+            return new AppData<SnakeData>(data,
+                new ISimulator<SnakeData>[]
+                {
+                    new DirectionSimulator(),
+                    new MoveSimulator(),
+                    new FruitSimulator(),
+                    new DeathSimulator(),
+                },
+                new IRenderer<SnakeData>[]
                 {
                     new BackgroundRenderer(),
                     new SnakeRenderer(),

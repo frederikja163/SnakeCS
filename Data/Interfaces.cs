@@ -2,16 +2,16 @@ using System.Collections.Generic;
 
 namespace Snake.Data
 {
-    public interface IRenderer
+    public interface IRenderer<T>
     {
-        void Initialize(BoardData data);
-        void Render(BoardData data);
+        void Initialize(in T data);
+        void Render(in T data);
     }
 
-    public interface ISimulator
+    public interface ISimulator<T>
     {
-        void Initialize(ControlList controls, BoardData data);
+        void Initialize(in ControlList controls, in T data);
 
-        BoardData Tick(BoardData data);
+        T Tick(in T data);
     }
 }

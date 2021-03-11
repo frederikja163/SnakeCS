@@ -6,11 +6,11 @@ using Snake.Data;
 namespace Snake.Simulation
 {
     
-    public sealed class DirectionSimulator : ISimulator
+    public sealed class DirectionSimulator : ISimulator<SnakeData>
     {
         private Direction? _nextDirection;
         private Direction _currentDirection;
-        public void Initialize(ControlList controls, BoardData data)
+        public void Initialize(in ControlList controls, in SnakeData data)
         {
             _currentDirection = data.Direction;
             controls[Control.TurnUp] = () =>
@@ -31,7 +31,7 @@ namespace Snake.Simulation
             };
         }
 
-        public BoardData Tick(BoardData data)
+        public SnakeData Tick(in SnakeData data)
         {
             _currentDirection = data.Direction;
             if (_nextDirection != null)
@@ -45,14 +45,14 @@ namespace Snake.Simulation
         }
     }
     
-    public sealed class MoveSimulator : ISimulator
+    public sealed class MoveSimulator : ISimulator<SnakeData>
     {
 
-        public void Initialize(ControlList controls, BoardData data)
+        public void Initialize(in ControlList controls, in SnakeData data)
         {
         }
 
-        public BoardData Tick(BoardData data)
+        public SnakeData Tick(in SnakeData data)
         {
             var oldBody = data.SnakeBody;
             var directionVector = data.Direction switch
@@ -77,14 +77,14 @@ namespace Snake.Simulation
         }
     }
 
-    public sealed class DeathSimulator : ISimulator
+    public sealed class DeathSimulator : ISimulator<SnakeData>
     {
-        public void Initialize(ControlList controls, BoardData data)
+        public void Initialize(in ControlList controls, in SnakeData data)
         {
             
         }
 
-        public BoardData Tick(BoardData data)
+        public SnakeData Tick(in SnakeData data)
         {
             SnakeBody body = data.SnakeBody;
             SnakePart head = body.Head;
@@ -107,18 +107,18 @@ namespace Snake.Simulation
         }
     }
     
-    public sealed class FruitSimulator : ISimulator
+    public sealed class FruitSimulator : ISimulator<SnakeData>
     {
         private Random _random;
         private SnakePart _oldTail;
         
-        public void Initialize(ControlList controls, BoardData data)
+        public void Initialize(in ControlList controls, in SnakeData data)
         {
             _random = new Random();
             _oldTail = data.SnakeBody.Tail;
         }
 
-        public BoardData Tick(BoardData data)
+        public SnakeData Tick(in SnakeData data)
         {
             SnakePart oldTail = _oldTail;
             _oldTail = data.SnakeBody.Tail;

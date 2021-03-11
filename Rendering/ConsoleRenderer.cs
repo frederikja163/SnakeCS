@@ -36,7 +36,7 @@ namespace Snake.Rendering
         private char? _pressedKey;
         private readonly object _lockObj = new object();
 
-        public void Initialize(ref ControlList controls)
+        public void Initialize(in ControlList controls)
         {
             _controls.Add('w', controls[Control.TurnUp]);
             _controls.Add('a', controls[Control.TurnLeft]);
@@ -80,11 +80,11 @@ namespace Snake.Rendering
         }
     }
 
-    public sealed class SnakeRenderer : IRenderer
+    public sealed class SnakeRenderer : IRenderer<SnakeData>
     {
         private Vector2i _lastTailPosition;
 
-        public void Initialize(BoardData data)
+        public void Initialize(in SnakeData data)
         {
             SnakePart? current = data.SnakeBody.Tail;
             _lastTailPosition = current.Position;
@@ -94,7 +94,7 @@ namespace Snake.Rendering
             } while ((current = current.NextPartHeadDirection) != null);
         }
 
-        public void Render(BoardData data)
+        public void Render(in SnakeData data)
         {
             SnakeBody body = data.SnakeBody;
             
@@ -108,15 +108,15 @@ namespace Snake.Rendering
         }
     }
 
-    public sealed class FruitRenderer : IRenderer
+    public sealed class FruitRenderer : IRenderer<SnakeData>
     {
         private Vector2i? _fruit;
         
-        public void Initialize(BoardData data)
+        public void Initialize(in SnakeData data)
         {
         }
 
-        public void Render(BoardData data)
+        public void Render(in SnakeData data)
         {
             if (_fruit != data.Fruit)
             {
@@ -126,9 +126,9 @@ namespace Snake.Rendering
         }
     }
     
-    public sealed class BackgroundRenderer : IRenderer
+    public sealed class BackgroundRenderer : IRenderer<SnakeData>
     {
-        public void Initialize(BoardData data)
+        public void Initialize(in SnakeData data)
         {
             int width = data.BoundingBox.Size.X;
             int height = data.BoundingBox.Size.Y;
@@ -154,7 +154,7 @@ namespace Snake.Rendering
             Console.SetCursorPosition(0, 0);
         }
 
-        public void Render(BoardData data)
+        public void Render(in SnakeData data)
         {
             
         }
