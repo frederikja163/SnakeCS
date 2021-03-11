@@ -8,8 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ConsoleRenderer\ConsoleRenderer.csproj" />
       <ProjectReference Include="..\Data\Data.csproj" />
-      <ProjectReference Include="..\Rendering\Rendering.csproj" />
       <ProjectReference Include="..\Simulation\Simulation.csproj" />
     </ItemGroup>
 

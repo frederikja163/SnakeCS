@@ -16,8 +16,9 @@ namespace Snake.EntryPoint
             SnakeBody snake = CreateSnake(5, (Vector2i)boundingBox.Center);
             SnakeData data = new SnakeData(snake, Direction.Right, boundingBox, (Vector2i)boundingBox.Center + Vector2i.UnitX * 5);
 
-            AppData<SnakeData> appData = CreateConsoleApp(data, new ControlList());
-
+            // AppData<SnakeData> appData = CreateConsoleApp(data);
+            AppData<SnakeData> appData = CreateOpenTK2DApp(data);
+            
             appData.Initialize();
             
             bool isRunning = true;
@@ -43,7 +44,7 @@ namespace Snake.EntryPoint
             return body;
         }
 
-        private static AppData<SnakeData> Create2dOpentkApp(SnakeData data, ControlList controls)
+        private static AppData<SnakeData> CreateOpenTK2DApp(SnakeData data)
         {
             return new AppData<SnakeData>(data,
                 new ISimulator<SnakeData>[]
@@ -55,7 +56,9 @@ namespace Snake.EntryPoint
                 },
                 new IRenderer<SnakeData>[]
                 {
-                    
+                    new BackgroundRenderer(),
+                    new SnakeRenderer(),
+                    new FruitRenderer(),
                 },
                 new IUserInterface[]
                 {
@@ -64,7 +67,7 @@ namespace Snake.EntryPoint
             );
         }
 
-        private static AppData<SnakeData> CreateConsoleApp(SnakeData data, ControlList controls)
+        private static AppData<SnakeData> CreateConsoleApp(SnakeData data)
         {
             return new AppData<SnakeData>(data,
                 new ISimulator<SnakeData>[]

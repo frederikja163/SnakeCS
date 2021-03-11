@@ -2,11 +2,15 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulation", "Simulation\Simulation.csproj", "{68FB1117-DC11-4780-86D2-D5F5DB1E7D4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rendering", "Rendering\Rendering.csproj", "{6E461AB0-8E39-4175-B628-A19771EA88A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleRenderer", "ConsoleRenderer\ConsoleRenderer.csproj", "{6E461AB0-8E39-4175-B628-A19771EA88A5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{D0F011EC-2534-4ACF-B638-9AD8E8FBC2ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntryPoint", "EntryPoint\EntryPoint.csproj", "{194DFE63-BFB4-4229-94BC-525F3D3767AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Renderers", "Renderers", "{CF69BA8F-BB9F-4B80-911E-9A793C90C1EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTK2DRenderer", "OpenTK2DRenderer\OpenTK2DRenderer.csproj", "{3D2B82A5-0908-474C-8EEE-78BDB189924B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +34,13 @@ Global
 		{194DFE63-BFB4-4229-94BC-525F3D3767AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{194DFE63-BFB4-4229-94BC-525F3D3767AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{194DFE63-BFB4-4229-94BC-525F3D3767AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D2B82A5-0908-474C-8EEE-78BDB189924B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D2B82A5-0908-474C-8EEE-78BDB189924B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D2B82A5-0908-474C-8EEE-78BDB189924B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D2B82A5-0908-474C-8EEE-78BDB189924B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6E461AB0-8E39-4175-B628-A19771EA88A5} = {CF69BA8F-BB9F-4B80-911E-9A793C90C1EB}
+		{3D2B82A5-0908-474C-8EEE-78BDB189924B} = {CF69BA8F-BB9F-4B80-911E-9A793C90C1EB}
 	EndGlobalSection
 EndGlobal
