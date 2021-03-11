@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using Snake.Data;
 
@@ -87,16 +88,15 @@ namespace Snake.Rendering
         {
             SnakePart? current = data.SnakeBody.Tail;
             _lastTailPosition = current.Position;
-            ConsoleUtility.WriteToPosition(current.Position, '#');
-            while ((current = current.NextPartHeadDirection) != null)
+            do
             {
                 ConsoleUtility.WriteToPosition(current.Position, '#');
-            }
+            } while ((current = current.NextPartHeadDirection) != null);
         }
 
         public void Render(BoardData data)
         {
-            var body = data.SnakeBody;
+            SnakeBody body = data.SnakeBody;
             
             ConsoleUtility.WriteToPosition(_lastTailPosition, ' ');
             _lastTailPosition = body.Tail.Position;

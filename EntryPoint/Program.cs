@@ -13,7 +13,7 @@ namespace Snake.EntryPoint
         public static void Main(string[] args)
         {
             SnakeBody snake = CreateSnake(5);
-            BoardData data = new BoardData(snake, Direction.Right);
+            BoardData data = new BoardData(snake, Direction.Right, Vector2i.One);
             ControlList controls = new ControlList();
 
             IRenderer[] renderers = new IRenderer[]
@@ -24,6 +24,7 @@ namespace Snake.EntryPoint
             {
                 new DirectionSimulator(),
                 new MoveSimulator(),
+                new DeathSimulator(),
             };
             IUserInterface[] userInterfaces = new IUserInterface[]
             {
@@ -45,7 +46,7 @@ namespace Snake.EntryPoint
 
             bool isRunning = true;
             controls[Control.Close] = () => isRunning = false;
-            while (isRunning)
+            while (isRunning && data.IsAlive)
             {
                 foreach (var userInterface in userInterfaces)
                 {
