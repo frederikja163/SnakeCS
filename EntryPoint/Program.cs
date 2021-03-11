@@ -17,33 +17,17 @@ namespace Snake.EntryPoint
             BoardData data = new BoardData(snake, Direction.Right, boundingBox, (Vector2i)boundingBox.Center + Vector2i.UnitX * 5);
             ControlList controls = new ControlList();
 
-            IRenderer[] renderers = new IRenderer[]
-            {
-                new BackgroundRenderer(),
-                new SnakeRenderer(),
-                new FruitRenderer(),
-            };
-            ISimulator[] simulators = new ISimulator[]
-            {
-                new DirectionSimulator(),
-                new MoveSimulator(),
-                new FruitSimulator(),
-                new DeathSimulator(),
-            };
-            IUserInterface[] userInterfaces = new IUserInterface[]
-            {
-                new ConsoleUserInterface(),
-            };
+            AppData appData = CreateConsoleApp(data);
             
-            foreach (var simulator in simulators)
+            foreach (var simulator in appData.Simulators)
             {
                 simulator.Initialize(controls, data);
             }
-            foreach (var renderer in renderers)
+            foreach (var renderer in appData.Renderers)
             {
                 renderer.Initialize(data);
             }
-            foreach (var userInterface in userInterfaces)
+            foreach (var userInterface in appData.UserInterfaces)
             {
                 userInterface.Initialize(ref controls);
             }
@@ -52,17 +36,17 @@ namespace Snake.EntryPoint
             controls[Control.Close] = () => isRunning = false;
             while (isRunning && data.IsAlive)
             {
-                foreach (var userInterface in userInterfaces)
+                foreach (var userInterface in appData.UserInterfaces)
                 {
                     userInterface.PollInput();
                 }
                 
-                foreach (var simulator in simulators)
+                foreach (var simulator in appData.Simulators)
                 {
                     data = simulator.Tick(data);
                 }
 
-                foreach (var renderer in renderers)
+                foreach (var renderer in appData.Renderers)
                 {
                     renderer.Render(data);
                 }
@@ -82,6 +66,29 @@ namespace Snake.EntryPoint
 
             SnakeBody body = new SnakeBody(head, tail);
             return body;
+        }
+
+        private static AppData CreateConsoleApp(BoardData data)
+        {
+            return new AppData(data,
+                new ISimulator[]
+                {
+                    new DirectionSimulator(),
+                    new MoveSimulator(),
+                    new FruitSimulator(),
+                    new DeathSimulator(),
+                },
+                new IRenderer[]
+                {
+                    new BackgroundRenderer(),
+                    new SnakeRenderer(),
+                    new FruitRenderer(),
+                },
+                new IUserInterface[]
+                {
+                    new ConsoleUserInterface(),
+                }
+            );
         }
     }
 }
