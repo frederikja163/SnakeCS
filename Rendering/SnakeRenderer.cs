@@ -90,7 +90,7 @@ namespace Snake.Rendering
             _lastTailPosition = current.Position;
             do
             {
-                ConsoleUtility.WriteToPosition(current.Position, '#');
+                ConsoleUtility.WriteToPosition(current.Position, '¤');
             } while ((current = current.NextPartHeadDirection) != null);
         }
 
@@ -102,9 +102,61 @@ namespace Snake.Rendering
             _lastTailPosition = body.Tail.Position;
             
             Vector2i headPosition = body.Head.Position;
-            ConsoleUtility.WriteToPosition(headPosition, '#');
+            ConsoleUtility.WriteToPosition(headPosition, "¤");
             
             Console.SetCursorPosition(0, 0);
+        }
+    }
+
+    public sealed class FruitRenderer : IRenderer
+    {
+        private Vector2i? _fruit;
+        
+        public void Initialize(BoardData data)
+        {
+        }
+
+        public void Render(BoardData data)
+        {
+            if (_fruit != data.Fruit)
+            {
+                ConsoleUtility.WriteToPosition(data.Fruit, "@");
+                _fruit = data.Fruit;
+            }
+        }
+    }
+    
+    public sealed class BackgroundRenderer : IRenderer
+    {
+        public void Initialize(BoardData data)
+        {
+            int width = data.BoundingBox.Size.X;
+            int height = data.BoundingBox.Size.Y;
+            
+            Console.SetCursorPosition(data.BoundingBox.Min.X - 1, data.BoundingBox.Min.Y - 1);
+            char[] wallRow = new char[width + 3];
+            char[] middleRow = new char[width + 3];
+            for (int i = 0; i < wallRow.Length; i++)
+            {
+                wallRow[i] = '#';
+                middleRow[i] = ' ';
+            }
+            middleRow[0] = '#';
+            middleRow[^1] = '#';
+
+            Console.WriteLine(wallRow);
+            for (int i = data.BoundingBox.Min.Y; i <= data.BoundingBox.Max.Y; i++)
+            {
+                Console.SetCursorPosition(data.BoundingBox.Min.X - 1, i);
+                Console.WriteLine(middleRow);
+            }
+            Console.WriteLine(wallRow);
+            Console.SetCursorPosition(0, 0);
+        }
+
+        public void Render(BoardData data)
+        {
+            
         }
     }
 }

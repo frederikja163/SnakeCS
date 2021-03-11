@@ -89,6 +89,12 @@ namespace Snake.Simulation
             SnakeBody body = data.SnakeBody;
             SnakePart head = body.Head;
             SnakePart current = body.Tail;
+            
+            if (!data.BoundingBox.Contains(head.Position))
+            {
+                return data with {IsAlive = false};
+            }
+            
             do
             {
                 if (head.Position == current.Position)
@@ -103,10 +109,12 @@ namespace Snake.Simulation
     
     public sealed class FruitSimulator : ISimulator
     {
+        private Random _random;
         private SnakePart _oldTail;
         
         public void Initialize(ControlList controls, BoardData data)
         {
+            _random = new Random();
             _oldTail = data.SnakeBody.Tail;
         }
 
@@ -116,7 +124,12 @@ namespace Snake.Simulation
             _oldTail = data.SnakeBody.Tail;
             if (data.SnakeBody.Head.Position == data.Fruit)
             {
-                return data with {SnakeBody = data.SnakeBody with {Tail = oldTail}};
+                int x = _random.Next(data.BoundingBox.Min.X, data.BoundingBox.Max.X);
+                int y = _random.Next(data.BoundingBox.Min.Y, data.BoundingBox.Max.Y);
+                Vector2i fruitPosition = new Vector2i(x, y);
+
+                SnakeBody newBody = data.SnakeBody with {Tail = oldTail};
+                return data with {Fruit = fruitPosition, SnakeBody = newBody};
             }
             
             return data;
