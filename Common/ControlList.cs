@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Snake.Data
+namespace Snake.Common
 {
     public delegate void ControlCallback();
 
@@ -12,13 +12,6 @@ namespace Snake.Data
         TurnDown,
         TurnLeft,
         Close,
-    }
-    
-    public interface IUserInterface
-    {
-        void Initialize(in ControlList controls);
-
-        void PollInput();
     }
 
     public sealed class ControlList

@@ -8,8 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Common\Common.csproj" />
       <ProjectReference Include="..\ConsoleRenderer\ConsoleRenderer.csproj" />
-      <ProjectReference Include="..\Data\Data.csproj" />
+      <ProjectReference Include="..\OpenTK2DRenderer\OpenTK2DRenderer.csproj" />
       <ProjectReference Include="..\Simulation\Simulation.csproj" />
     </ItemGroup>
 

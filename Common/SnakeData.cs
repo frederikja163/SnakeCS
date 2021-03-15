@@ -1,9 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using OpenTK.Mathematics;
 
-namespace Snake.Data
+namespace Snake.Common
 {
     public enum Direction
     {

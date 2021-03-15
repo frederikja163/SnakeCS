@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using OpenTK.Mathematics;
-using Snake.Data;
+using Snake.Common;
 
 namespace Snake.Simulation
 {

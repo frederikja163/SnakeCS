@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulation", "Simulation\Si
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleRenderer", "ConsoleRenderer\ConsoleRenderer.csproj", "{6E461AB0-8E39-4175-B628-A19771EA88A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{D0F011EC-2534-4ACF-B638-9AD8E8FBC2ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{D0F011EC-2534-4ACF-B638-9AD8E8FBC2ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntryPoint", "EntryPoint\EntryPoint.csproj", "{194DFE63-BFB4-4229-94BC-525F3D3767AA}"
 EndProject

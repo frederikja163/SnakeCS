@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 using OpenTK.Mathematics;
-using Snake.Data;
+using Snake.Common;
 using Snake.Rendering;
 using Snake.Simulation;
 
@@ -15,9 +15,18 @@ namespace Snake.EntryPoint
             Box2i boundingBox = new Box2i(1, 1, 25, 10);
             SnakeBody snake = CreateSnake(5, (Vector2i)boundingBox.Center);
             SnakeData data = new SnakeData(snake, Direction.Right, boundingBox, (Vector2i)boundingBox.Center + Vector2i.UnitX * 5);
-
-            // AppData<SnakeData> appData = CreateConsoleApp(data);
-            AppData<SnakeData> appData = CreateOpenTK2DApp(data);
+            ISimulator<SnakeData>[] simulators = new ISimulator<SnakeData>[]
+                {
+                    new DirectionSimulator(),
+                    new MoveSimulator(),
+                    new FruitSimulator(),
+                    new DeathSimulator(),
+                };
+            IPlatform<SnakeData>[] platforms = new IPlatform<SnakeData>[]
+            {
+                new ConsolePlatform(),
+            };
+            AppData<SnakeData> appData = new AppData<SnakeData>(data, simulators, platforms);
             
             appData.Initialize();
             
@@ -42,52 +51,6 @@ namespace Snake.EntryPoint
 
             SnakeBody body = new SnakeBody(head, tail);
             return body;
-        }
-
-        private static AppData<SnakeData> CreateOpenTK2DApp(SnakeData data)
-        {
-            return new AppData<SnakeData>(data,
-                new ISimulator<SnakeData>[]
-                {
-                    new DirectionSimulator(),
-                    new MoveSimulator(),
-                    new FruitSimulator(),
-                    new DeathSimulator(),
-                },
-                new IRenderer<SnakeData>[]
-                {
-                    new BackgroundRenderer(),
-                    new SnakeRenderer(),
-                    new FruitRenderer(),
-                },
-                new IUserInterface[]
-                {
-                    
-                }
-            );
-        }
-
-        private static AppData<SnakeData> CreateConsoleApp(SnakeData data)
-        {
-            return new AppData<SnakeData>(data,
-                new ISimulator<SnakeData>[]
-                {
-                    new DirectionSimulator(),
-                    new MoveSimulator(),
-                    new FruitSimulator(),
-                    new DeathSimulator(),
-                },
-                new IRenderer<SnakeData>[]
-                {
-                    new BackgroundRenderer(),
-                    new SnakeRenderer(),
-                    new FruitRenderer(),
-                },
-                new IUserInterface[]
-                {
-                    new ConsoleUserInterface(),
-                }
-            );
         }
     }
 }

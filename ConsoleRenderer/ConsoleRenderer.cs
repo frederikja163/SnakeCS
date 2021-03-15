@@ -3,11 +3,50 @@ using System.Collections.Generic;
 using System.Threading;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
-using Snake.Data;
+using Snake.Common;
 
 namespace Snake.Rendering
 {
-    public static class ConsoleUtility
+    public sealed class ConsolePlatform : IPlatform<SnakeData>
+    {
+        public IReadOnlyCollection<IRenderer<SnakeData>> Renderers { get; } = new IRenderer<SnakeData>[]
+        {
+            new BackgroundRenderer(),
+            new FruitRenderer(),
+            new SnakeRenderer()
+        };
+
+        public IReadOnlyCollection<IUserInterface> UserInterfaces { get; } = new IUserInterface[]
+        {
+            new ConsoleUserInterface(),
+        };
+        
+        public void Initialize(in ControlList controls, in SnakeData data)
+        {
+            foreach (var renderer in Renderers)
+            {
+                renderer.Initialize(data);
+            }
+            foreach (var userInterface in UserInterfaces)
+            {
+                userInterface.Initialize(controls);
+            }
+        }
+
+        public void Tick(in SnakeData data)
+        {
+            foreach (var renderer in Renderers)
+            {
+                renderer.Render(data);
+            }
+            foreach (var userInterface in UserInterfaces)
+            {
+                userInterface.PollInput();
+            }
+        }
+    }
+    
+    internal static class ConsoleUtility
     {
         public static void WriteToPosition(Vector2i position, char c)
         {
@@ -30,7 +69,7 @@ namespace Snake.Rendering
         }
     }
     
-    public sealed class ConsoleUserInterface : IUserInterface
+    internal sealed class ConsoleUserInterface : IUserInterface
     {
         private readonly Dictionary<char, ControlCallback> _controls = new Dictionary<char, ControlCallback>();
         private char? _pressedKey;
@@ -42,6 +81,7 @@ namespace Snake.Rendering
             _controls.Add('a', controls[Control.TurnLeft]);
             _controls.Add('s', controls[Control.TurnDown]);
             _controls.Add('d', controls[Control.TurnRight]);
+            _controls.Add('q', controls[Control.Close]);
 
             var thread = new Thread(InputThreadStart);
             thread.IsBackground = true;
@@ -80,7 +120,7 @@ namespace Snake.Rendering
         }
     }
 
-    public sealed class SnakeRenderer : IRenderer<SnakeData>
+    internal sealed class SnakeRenderer : IRenderer<SnakeData>
     {
         private Vector2i _lastTailPosition;
 
@@ -108,7 +148,7 @@ namespace Snake.Rendering
         }
     }
 
-    public sealed class FruitRenderer : IRenderer<SnakeData>
+    internal sealed class FruitRenderer : IRenderer<SnakeData>
     {
         private Vector2i? _fruit;
         
@@ -126,7 +166,7 @@ namespace Snake.Rendering
         }
     }
     
-    public sealed class BackgroundRenderer : IRenderer<SnakeData>
+    internal sealed class BackgroundRenderer : IRenderer<SnakeData>
     {
         public void Initialize(in SnakeData data)
         {
