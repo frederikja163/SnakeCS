@@ -7,42 +7,42 @@ using Snake.Common;
 
 namespace Snake.Rendering
 {
+    internal interface IRenderer<T>
+    {
+        void Initialize(in T data);
+        void Render(in T data);
+    }
+    
     public sealed class ConsolePlatform : IPlatform<SnakeData>
     {
-        public IReadOnlyCollection<IRenderer<SnakeData>> Renderers { get; } = new IRenderer<SnakeData>[]
+        private readonly IReadOnlyCollection<IRenderer<SnakeData>> _renderers = new IRenderer<SnakeData>[]
         {
             new BackgroundRenderer(),
             new FruitRenderer(),
             new SnakeRenderer()
         };
 
-        public IReadOnlyCollection<IUserInterface> UserInterfaces { get; } = new IUserInterface[]
-        {
-            new ConsoleUserInterface(),
-        };
+        private readonly ConsoleUserInterface _userInterfaces = new ConsoleUserInterface();
         
-        public void Initialize(in ControlList controls, in SnakeData data)
+        public ConsolePlatform(in ControlList controls, in SnakeData data)
         {
-            foreach (var renderer in Renderers)
+            foreach (var renderer in _renderers)
             {
                 renderer.Initialize(data);
-            }
-            foreach (var userInterface in UserInterfaces)
-            {
-                userInterface.Initialize(controls);
             }
         }
 
         public void Tick(in SnakeData data)
         {
-            foreach (var renderer in Renderers)
+            foreach (var renderer in _renderers)
             {
                 renderer.Render(data);
             }
-            foreach (var userInterface in UserInterfaces)
-            {
-                userInterface.PollInput();
-            }
+            _userInterfaces.PollInput();
+        }
+
+        public void Dispose()
+        {
         }
     }
     
@@ -69,7 +69,7 @@ namespace Snake.Rendering
         }
     }
     
-    internal sealed class ConsoleUserInterface : IUserInterface
+    internal sealed class ConsoleUserInterface
     {
         private readonly Dictionary<char, ControlCallback> _controls = new Dictionary<char, ControlCallback>();
         private char? _pressedKey;

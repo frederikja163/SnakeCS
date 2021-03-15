@@ -10,7 +10,7 @@ namespace Snake.Simulation
     {
         private Direction? _nextDirection;
         private Direction _currentDirection;
-        public void Initialize(in ControlList controls, in SnakeData data)
+        public DirectionSimulator(in ControlList controls, in SnakeData data)
         {
             _currentDirection = data.Direction;
             controls[Control.TurnUp] = () =>
@@ -48,7 +48,7 @@ namespace Snake.Simulation
     public sealed class MoveSimulator : ISimulator<SnakeData>
     {
 
-        public void Initialize(in ControlList controls, in SnakeData data)
+        public MoveSimulator(in ControlList controls, in SnakeData data)
         {
         }
 
@@ -79,7 +79,7 @@ namespace Snake.Simulation
 
     public sealed class DeathSimulator : ISimulator<SnakeData>
     {
-        public void Initialize(in ControlList controls, in SnakeData data)
+        public DeathSimulator(in ControlList controls, in SnakeData data)
         {
             
         }
@@ -112,7 +112,7 @@ namespace Snake.Simulation
         private Random _random;
         private SnakePart _oldTail;
         
-        public void Initialize(in ControlList controls, in SnakeData data)
+        public FruitSimulator(in ControlList controls, in SnakeData data)
         {
             _random = new Random();
             _oldTail = data.SnakeBody.Tail;

@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using OpenTK.Mathematics;
 using Snake.Common;
+using Snake.Gl2DRenderer;
 using Snake.Rendering;
 using Snake.Simulation;
 
@@ -15,20 +16,20 @@ namespace Snake.EntryPoint
             Box2i boundingBox = new Box2i(1, 1, 25, 10);
             SnakeBody snake = CreateSnake(5, (Vector2i)boundingBox.Center);
             SnakeData data = new SnakeData(snake, Direction.Right, boundingBox, (Vector2i)boundingBox.Center + Vector2i.UnitX * 5);
+            ControlList controls = new ControlList();
             ISimulator<SnakeData>[] simulators = new ISimulator<SnakeData>[]
                 {
-                    new DirectionSimulator(),
-                    new MoveSimulator(),
-                    new FruitSimulator(),
-                    new DeathSimulator(),
+                    new DirectionSimulator(controls, data),
+                    new MoveSimulator(controls, data),
+                    new FruitSimulator(controls, data),
+                    new DeathSimulator(controls, data),
                 };
             IPlatform<SnakeData>[] platforms = new IPlatform<SnakeData>[]
             {
-                new ConsolePlatform(),
+                new ConsolePlatform(controls, data),
+                new Gl2DPlatform(controls, data),
             };
             AppData<SnakeData> appData = new AppData<SnakeData>(data, simulators, platforms);
-            
-            appData.Initialize();
             
             bool isRunning = true;
             appData.Controls[Control.Close] = () => isRunning = false;

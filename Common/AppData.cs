@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 
 namespace Snake.Common
 {
-    public sealed class AppData<T>
+    public sealed class AppData<T> : IDisposable
     {
         public T Data { get; private set; }
         public ControlList Controls { get; }
@@ -17,19 +18,6 @@ namespace Snake.Common
             
             Controls = controls ?? new ControlList();
         }
-        
-        public void Initialize()
-        {
-            foreach (var simulator in Simulators)
-            {
-                simulator.Initialize(Controls, Data);
-            }
-
-            foreach (var platform in Platforms)
-            {
-                platform.Initialize(Controls, Data);
-            }
-        }
 
         public void Tick()
         {
@@ -41,6 +29,17 @@ namespace Snake.Common
             foreach (var platform in Platforms)
             {
                 platform.Tick(Data);
+            }
+        }
+
+        public void Dispose()
+        {
+            foreach (var platform in Platforms)
+            {
+                if (platform is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
             }
         }
     }
